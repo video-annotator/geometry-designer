@@ -1,5 +1,5 @@
-set WINPYDIR=C:\Users\swp\Python\WinPython-32bit-2.7.10\python-2.7.10
-set WINPYVER=2.7.10
+set WINPYDIR=C:\Users\swp\Python\WinPython-32bit-2.7.10.3\python-2.7.10
+set WINPYVER=2.7.10.3
 set HOME=%WINPYDIR%\..\settings
 set WINPYARCH="WIN32"
 
