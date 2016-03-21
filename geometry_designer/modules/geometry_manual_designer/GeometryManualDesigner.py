@@ -66,11 +66,11 @@ class GeometryManualDesigner(BaseWidget):
 		self._square = ControlButton("Square", checkable=True)
 		self._circle = ControlButton("Circle", checkable=True)
 		self._threshold = ControlButton("Threshold")
-		self._export = ControlButton("Export")
-		self._import = ControlButton("Import")
-		self._polygons = ControlList('Polygons')
+		self._export 	= ControlButton("Export")
+		self._import 	= ControlButton("Import")
+		self._polygons 	= ControlList('Polygons')
 
-		self._formset = [ '_video',"_player", ("_square", "_circle", "_threshold", " ","_remove"," ", "_export", "_import"), "=", "_polygons" ]
+		self._formset 	= [ '_video',"_player", ("_square", "_circle", "_threshold", " ","_remove"," ", "_export", "_import"), "=", "_polygons" ]
 
 		self._video.changed 	= self.videoSelected
 		self._square.value  	= self.square_toggle
@@ -87,7 +87,6 @@ class GeometryManualDesigner(BaseWidget):
 		self._player.processFrame   = self.process_frame
 		self._player.onKeyRelease 	= self.on_player_key_release
 
-
 		#self._video.value = '/home/ricardo/Desktop/Ai35_3_Ai35xa2aCre14Hz_35ms_Lside_Lp.avi'
 
 	def on_player_key_release(self, event):
@@ -100,8 +99,7 @@ class GeometryManualDesigner(BaseWidget):
 					self._polygons.setValue( 1, self._selectedPoly, points )
 				except: pass
 				if not self._player.isPlaying(): self._player.refresh()
-            
-		
+
 	def export_clicked(self):
 		filename = str(QtGui.QFileDialog.getSaveFileName(self, 'Choose a file', '') )
 		if filename!="":
@@ -111,34 +109,26 @@ class GeometryManualDesigner(BaseWidget):
 
 	def import_clicked(self):
 		filename = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose a file', '') )
-		print filename
 		if filename!="":
-			infile = open( filename, 'r');
+			infile 	 = open( filename, 'r');
 			polygons = []
-
-			for values in infile: 
-				print values
-				vals = line.split(';')
-				name = values[0]
-				poly = values[1]
+			for line in infile:
+				values = line.split(';')
+				name   = values[0]
+				poly   = values[1]
 				polygons.append( (name, poly) )
 			self._polygons.value += polygons
-			print polygons
 
 	def process_frame(self, frame):
 		rows = self._polygons.value
-
-		for objIndex, obj in enumerate(rows):
-		
+		for objIndex, obj in enumerate(rows):		
 			points = eval(obj[1])
-			cv2.polylines(frame, [np.array(points,np.int32)], True, (0,255,0), 1, lineType=cv2.LINE_AA)
-			
+			cv2.polylines(frame, [np.array(points,np.int32)], True, (0,255,0), 1, lineType=cv2.LINE_AA)			
 			for pointIndex, point in enumerate( points ):
 				if self._selectedPoint == pointIndex and objIndex==self._selectedPoly:
 					cv2.circle(frame, point, 4, (0,0,255), 2)
 				else:
 					cv2.circle(frame, point, 4, (0,255,0), 2)
-			
 			
 		if self._startPoint and self._endPoint:
 			if self._square.checked:
@@ -166,6 +156,7 @@ class GeometryManualDesigner(BaseWidget):
 				self._selectedPoint = None
 				self._selectedPoly = None
 			except: pass
+
 
 	def getIntersectionPoint(self, testPoint, point1, point2, tolerance = 5):
 		vector = ( point2[0]-point1[0], point2[1]-point1[1] )

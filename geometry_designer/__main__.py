@@ -11,7 +11,7 @@ class GeometryDesigner(GeometryManualDesigner):
     def __init__(self):
     	super(GeometryDesigner, self).__init__('Geometry designer')
 
-    	self._video.value = '/home/ricardo/bitbucket/single-fly-tracker/Circle_and_Square.avi'
+    	#self._video.value = '/home/ricardo/bitbucket/single-fly-tracker/Circle_and_Square.avi'
 
 
     	
