@@ -35,4 +35,4 @@ pip show pyforms
 
 rem echo "Running pyinstaller --additional-hooks-dir %BUILDSETTINGSDIR%\hooks --name %PROJECTNAME% --icon %BUILDSETTINGSDIR%\%ICONNAME% --onefile %MAINSCRIPT%"
 
-pyinstaller --additional-hooks-dir "%BUILDSETTINGSDIR%\hooks" --name "%PROJECTNAME%%DEV_VERSION%" --icon "%BUILDSETTINGSDIR%\%ICONNAME% --onefile %MAINSCRIPT%"
+pyinstaller --additional-hooks-dir "%BUILDSETTINGSDIR%\hooks" --name "%PROJECTNAME%%DEV_VERSION%" --icon "%BUILDSETTINGSDIR%\%ICONNAME%" --onefile "%MAINSCRIPT%"
