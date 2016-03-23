@@ -241,10 +241,11 @@ class GeometryManualDesigner(BaseWidget):
 		self._circle.checked = False
 
 
-	def __add_contour_from_threshold_win(self, contour):
-		if contour.any(): 
-			points = [tuple(p[0]) for p in contour.tolist()]
-			self._polygons += ["Poly_%d" % self._polygons.count, points]
+	def __add_contours_from_threshold_win(self, contours):
+		for contour in contours:
+			if contour.any(): 
+				points = [tuple(p[0]) for p in contour.tolist()]
+				self._polygons += ["Poly_%d" % self._polygons.count, points]
 
 	def videoSelected(self): self._player.value = self._video.value
 		
@@ -259,7 +260,7 @@ class GeometryManualDesigner(BaseWidget):
 	def threshold_btn_click(self):
 		if self._threshold_win is None:
 			self._threshold_win = GeometryFromThreshold(self)
-			self._threshold_win.add_contour = self.__add_contour_from_threshold_win
+			self._threshold_win.add_contours = self.__add_contours_from_threshold_win
 		
 		self._threshold_win.show()
 		if len(self._video.value)>0: self._threshold_win._filename.value = self._video.value

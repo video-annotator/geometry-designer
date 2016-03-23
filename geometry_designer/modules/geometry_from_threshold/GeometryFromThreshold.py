@@ -50,16 +50,16 @@ class GeometryFromThreshold(BaseWidget):
 		self._player.processFrame 	= self.__processFrame
 		self._threshold.changed 	= self._player.refresh
 		self._epsilon.changed 		= self._player.refresh
-		self._add_contour.value		= self.__add_contour
+		self._add_contour.value		= self.__add_contours
 
 		self._filename.value = '/home/ricardo/bitbucket/single-fly-tracker/Circle_and_Square.avi'
 
-		self._contour = []
+		self._contours = []
 		
 
-	def __add_contour(self): self.add_contour(self._contour)
+	def __add_contours(self): self.add_contours(self._contours)
 
-	def add_contour(self, contour): pass
+	def add_contours(self, contours): pass
 
 
 	def __filename_changed(self): self._player.value = self._filename.value
@@ -70,16 +70,19 @@ class GeometryFromThreshold(BaseWidget):
 		_, threshold = cv2.threshold(frame, self._threshold.value, 255, 0)
 
 		gray    = cv2.cvtColor(threshold, cv2.COLOR_BGR2GRAY)
-		contour = getBiggestContour(gray)
+		_, blobs, dummy = cv2.findContours( gray.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE )
+
 
 		threshold[:,:,0] = 0
 		threshold[:,:,1] = 0
 		dst = cv2.addWeighted(frame,0.7,threshold,0.3,0)
 
-		self._contour = contour = cv2.approxPolyDP(contour,self._epsilon.value,True)
-
-		cv2.polylines(dst, contour, True, (0,255,0), 11 )
-		cv2.polylines(dst, np.array([contour]), True, (0,255,0), 1 )
+		self._contours = []
+		for contour in blobs:
+			contour = cv2.approxPolyDP(contour,self._epsilon.value,True)
+			self._contours.append(contour)
+			cv2.polylines(dst, contour, True, (0,255,0), 11 )
+			cv2.polylines(dst, np.array([contour]), True, (0,255,0), 1 )
 		return dst
 
 
