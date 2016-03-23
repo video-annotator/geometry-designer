@@ -13,6 +13,7 @@ set BUILDSETTINGSDIR=%WORKSPACE%\build_settings\win
 set MAINSCRIPT=%WORKSPACE%\geometry_designer\__main__.py
 set BUILDOUTDIR=%WORKSPACE%\build
 set DISTOUTDIR=%WORKSPACE%\dist
+set EXPANDED_DISTOUTDIR=%WORKSPACE%\expanded_dist
 set ICONNAME=cf_icon_128x128.ico
 set DEV_VERSION=_v0.0.1.dev1
 
@@ -22,9 +23,11 @@ rem echo %BUILDSETTINGSDIR%
 rem echo %MAINSCRIPT%
 rem echo %BUILDOUTDIR%
 rem echo %DISTOUTDIR%
+rem echo %EXPANDED_DISTOUTDIR%
 
 @RD /S /Q %BUILDOUTDIR%
 @RD /S /Q %DISTOUTDIR%
+@RD /S /Q %EXPANDED_DISTOUTDIR%
 
 pip uninstall -y pyforms
 
@@ -36,3 +39,6 @@ pip show pyforms
 rem echo "Running pyinstaller --additional-hooks-dir %BUILDSETTINGSDIR%\hooks --name %PROJECTNAME% --icon %BUILDSETTINGSDIR%\%ICONNAME% --onefile %MAINSCRIPT%"
 
 pyinstaller --additional-hooks-dir "%BUILDSETTINGSDIR%\hooks" --name "%PROJECTNAME%%DEV_VERSION%" --icon "%BUILDSETTINGSDIR%\%ICONNAME%" --onefile "%MAINSCRIPT%"
+
+pyinstaller --distpath "%EXPANDED_DISTOUTDIR%" --additional-hooks-dir "%BUILDSETTINGSDIR%\hooks" --name "%PROJECTNAME%%DEV_VERSION%" --icon "%BUILDSETTINGSDIR%\%ICONNAME%" "%MAINSCRIPT%"
+
