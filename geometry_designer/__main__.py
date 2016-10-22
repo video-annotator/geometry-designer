@@ -1,9 +1,6 @@
-from geometry_designer.modules.geometry_from_threshold.GeometryFromThreshold import GeometryFromThreshold
+import pyforms
 from geometry_designer.modules.geometry_manual_designer.GeometryManualDesigner import GeometryManualDesigner
 
-from pyforms.Controls import ControlFile
-from pyforms import BaseWidget
-import pyforms
 
 class GeometryDesigner(GeometryManualDesigner):
     """Application form"""

@@ -49,8 +49,8 @@ def createCirclePoints( center, radius):
 
 class GeometryManualDesigner(BaseWidget):
 
-	def __init__(self, title):
-		super(GeometryManualDesigner, self).__init__(title)
+	def __init__(self, title, parent=None):
+		super(GeometryManualDesigner, self).__init__(title, parentWindow=parent)
 
 		self._threshold_win  = None
 		self._startPoint 	= None
@@ -70,7 +70,9 @@ class GeometryManualDesigner(BaseWidget):
 		self._import 	= ControlButton("Import")
 		self._polygons 	= ControlList('Polygons')
 
-		self._formset 	= [ '_video',"_player", ("_square", "_circle", "_threshold", " ","_remove"," ", "_export", "_import"), "=", "_polygons" ]
+		self._apply 	= ControlButton('Apply')
+
+		self._formset 	= [ '_video',"_player", ("_square", "_circle", "_threshold", " ","_remove"," ", "_export", "_import"), "=", "_polygons",'_apply' ]
 
 		self._video.changed 	= self.videoSelected
 		self._square.value  	= self.square_toggle
@@ -87,6 +89,8 @@ class GeometryManualDesigner(BaseWidget):
 		self._player.processFrame   = self.process_frame
 		self._player.onKeyRelease 	= self.on_player_key_release
 
+		self._apply.hide()
+
 		#self._video.value = '/home/ricardo/Desktop/Ai35_3_Ai35xa2aCre14Hz_35ms_Lside_Lp.avi'
 
 	def on_player_key_release(self, event):
@@ -98,7 +102,7 @@ class GeometryManualDesigner(BaseWidget):
 					p = points.pop(self._selectedPoint)
 					self._polygons.setValue( 1, self._selectedPoly, points )
 				except: pass
-				if not self._player.isPlaying(): self._player.refresh()
+				if not self._player.is_playing: self._player.refresh()
 
 	def export_clicked(self):
 		filename = str(QtGui.QFileDialog.getSaveFileName(self, 'Choose a file', '') )
@@ -200,14 +204,14 @@ class GeometryManualDesigner(BaseWidget):
 						points.insert( pointIndex + 1, intersection )
 						self._polygons.setValue( 1, self._selectedPoly, points )
 						self._selectedPoint = pointIndex + 1
-						if not self._player.isPlaying(): self._player.refresh()
+						if not self._player.is_playing: self._player.refresh()
 						return
 			except: pass
 
 	
 	def on_player_click_in_video_window(self, event, x, y):
 		self.selectPoint( int(x), int(y) )
-		if not self._player.isPlaying(): self._player.refresh()
+		if not self._player.is_playing: self._player.refresh()
 
 	def on_player_drag_in_video_window(self, startPoint, endPoint):
 		self._startPoint = ( int(startPoint[0]), int(startPoint[1]) )
@@ -221,7 +225,7 @@ class GeometryManualDesigner(BaseWidget):
 				self._polygons.setValue( 1, self._selectedPoly, points )
 			except: pass
 
-		if not self._player.isPlaying(): self._player.refresh() 
+		if not self._player.is_playing: self._player.refresh() 
 			
 	def on_player_end_drag_in_video_window(self, startPoint, endPoint):
 		self._startPoint = int(startPoint[0]), int(startPoint[1])
@@ -272,4 +276,23 @@ class GeometryManualDesigner(BaseWidget):
 		self._polygons -= -1 #Remove the selected row
 
 
+	@property
+	def polygons(self):
+		polys = []
+		rows = self._polygons.value
+		for objIndex, obj in enumerate(rows):		
+			points = eval(obj[1])
+			polys.append( np.array(points,np.int32) )
+		return np.array(polys)	
 
+	@property
+	def apply_evt(self): return self._apply.value
+	@apply_evt.setter
+	def apply_evt(self, value): 
+		self._apply.value = value
+		self._show_apply = value is not None
+		
+
+	def show(self):
+		super(GeometryManualDesigner, self).show()
+		if hasattr(self,'_show_apply') and self._show_apply: self._apply.show()

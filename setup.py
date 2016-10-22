@@ -16,7 +16,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='geometry_designer',
-    version='0.0.0',
+    version='0.0.2',
     description="""""",
     author='Ricardo Ribeiro',
     author_email='ricardo.ribeiro@neuro.fchampalimaud.org',
