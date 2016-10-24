@@ -237,7 +237,7 @@ class GeometryManualDesigner(BaseWidget):
 		elif self._circle.checked and self._endPoint[0]>self._startPoint[0] and self._endPoint[1]>self._startPoint[1]:
 			points = createEllipsePoints(self._startPoint, self._endPoint)
 
-		if points: self._polygons += ["Poly_%d" % self._polygons.count, points]
+		if points: self._polygons += ["Poly_%d" % self._polygons.rows_count, points]
 
 		self._startPoint = None
 		self._endPoint = None
@@ -249,7 +249,7 @@ class GeometryManualDesigner(BaseWidget):
 		for contour in contours:
 			if contour.any(): 
 				points = [tuple(p[0]) for p in contour.tolist()]
-				self._polygons += ["Poly_%d" % self._polygons.count, points]
+				self._polygons += ["Poly_%d" % self._polygons.rows_count, points]
 
 	def videoSelected(self): self._player.value = self._video.value
 		
