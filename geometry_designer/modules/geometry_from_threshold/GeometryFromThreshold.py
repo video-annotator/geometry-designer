@@ -33,7 +33,7 @@ def getBiggestContour(image, howmany=1):
 class GeometryFromThreshold(BaseWidget):
 	
 	def __init__(self, parent=None):
-		super(GeometryFromThreshold, self).__init__('Find geometry using a threshold on the image', parentWindow=parent)
+		super(GeometryFromThreshold, self).__init__('Find geometry using a threshold on the image', parent_win=parent)
 		
 		self._filename 		= ControlFile('Video file name')
 		self._player   		= ControlPlayer('Player')
@@ -46,11 +46,11 @@ class GeometryFromThreshold(BaseWidget):
 			('_threshold', '_epsilon','_add_contour'),
 			'_player']
 
-		self._filename.changed 		= self.__filename_changed
-		self._player.processFrame 	= self.__processFrame
-		self._threshold.changed 	= self._player.refresh
-		self._epsilon.changed 		= self._player.refresh
-		self._add_contour.value		= self.__add_contours
+		self._filename.changed_event 	= self.__filename_changed
+		self._player.processFrame 		= self.__processFrame
+		self._threshold.changed_event 	= self._player.refresh
+		self._epsilon.changed_event 	= self._player.refresh
+		self._add_contour.value			= self.__add_contours
 
 		self._filename.value = '/home/ricardo/bitbucket/single-fly-tracker/Circle_and_Square.avi'
 

@@ -50,14 +50,14 @@ def createCirclePoints( center, radius):
 class GeometryManualDesigner(BaseWidget):
 
 	def __init__(self, title, parent=None):
-		super(GeometryManualDesigner, self).__init__(title, parentWindow=parent)
+		super(GeometryManualDesigner, self).__init__(title, parent_win=parent)
 
 		self._threshold_win  = None
-		self._startPoint 	= None
-		self._endPoint 		= None
+		self._start_point 	= None
+		self._end_point 		= None
 
-		self._selectedPoly = None
-		self._selectedPoint = None
+		self._selected_poly = None
+		self._selected_point = None
 		
 
 		self._video  = ControlFile("Video file")
@@ -74,7 +74,7 @@ class GeometryManualDesigner(BaseWidget):
 
 		self._formset 	= [ '_video',"_player", ("_square", "_circle", "_threshold", " ","_remove"," ", "_export", "_import"), "=", "_polygons",'_apply' ]
 
-		self._video.changed 	= self.videoSelected
+		self._video.changedchanged_event 	= self.videoSelected
 		self._square.value  	= self.square_toggle
 		self._circle.value  	= self.circle_toggle
 		self._remove.value  	= self.remove_clicked
@@ -82,25 +82,23 @@ class GeometryManualDesigner(BaseWidget):
 		self._import.value  	= self.import_clicked
 		self._threshold.value  	= self.threshold_btn_click
 				
-		self._player.onDrag    		= self.on_player_drag_in_video_window
-		self._player.onEndDrag 		= self.on_player_end_drag_in_video_window
-		self._player.onClick   		= self.on_player_click_in_video_window
-		self._player.onDoubleClick 	= self.on_player_double_click_in_video_window
-		self._player.processFrame   = self.process_frame
-		self._player.onKeyRelease 	= self.on_player_key_release
+		self._player.drag_event 	 		= self.on_player_drag_in_video_window
+		self._player.end_drag_event	 		= self.on_player_end_drag_in_video_window
+		self._player.click_event   	 		= self.on_player_click_in_video_window
+		self._player.double_click_event 	= self.on_player_double_click_in_video_window
+		self._player.process_frame_event 	= self.process_frame
+		self._player.key_release_event  	= self.on_player_key_release
 
 		self._apply.hide()
 
-		#self._video.value = '/home/ricardo/Desktop/Ai35_3_Ai35xa2aCre14Hz_35ms_Lside_Lp.avi'
-
 	def on_player_key_release(self, event):
 		if event.key() == QtCore.Qt.Key_Delete:
-			if self._selectedPoly!=None and self._selectedPoint!=None:
-				poly = self._polygons.getValue( 1, self._selectedPoly )
+			if self._selected_poly!=None and self._selected_point!=None:
+				poly = self._polygons.get_value( 1, self._selected_poly )
 				try:
 					points = eval(poly)
-					p = points.pop(self._selectedPoint)
-					self._polygons.setValue( 1, self._selectedPoly, points )
+					p = points.pop(self._selected_point)
+					self._polygons.set_value( 1, self._selected_poly, points )
 				except: pass
 				if not self._player.is_playing: self._player.refresh()
 
@@ -129,18 +127,18 @@ class GeometryManualDesigner(BaseWidget):
 			points = eval(obj[1])
 			cv2.polylines(frame, [np.array(points,np.int32)], True, (0,255,0), 1, lineType=cv2.LINE_AA)			
 			for pointIndex, point in enumerate( points ):
-				if self._selectedPoint == pointIndex and objIndex==self._selectedPoly:
+				if self._selected_point == pointIndex and objIndex==self._selected_poly:
 					cv2.circle(frame, point, 4, (0,0,255), 2)
 				else:
 					cv2.circle(frame, point, 4, (0,255,0), 2)
 			
-		if self._startPoint and self._endPoint:
+		if self._start_point and self._end_point:
 			if self._square.checked:
-				cv2.rectangle(frame, self._startPoint, self._endPoint, (233,44,44), 1 )
-			elif self._circle.checked and self._endPoint[0]>self._startPoint[0] and self._endPoint[1]>self._startPoint[1]:
-				width = self._endPoint[0]-self._startPoint[0]
-				height = self._endPoint[1]-self._startPoint[1]
-				center = ( self._startPoint[0] + width/2, self._startPoint[1] + height/2 )
+				cv2.rectangle(frame, self._start_point, self._end_point, (233,44,44), 1 )
+			elif self._circle.checked and self._end_point[0]>self._start_point[0] and self._end_point[1]>self._start_point[1]:
+				width = self._end_point[0]-self._start_point[0]
+				height = self._end_point[1]-self._start_point[1]
+				center = ( self._start_point[0] + width/2, self._start_point[1] + height/2 )
 				
 				cv2.ellipse( frame, center, (width/2,height/2), 0, 0, 360, (233,44,44), 1 )
 				
@@ -154,11 +152,11 @@ class GeometryManualDesigner(BaseWidget):
 				points 		= eval(obj[1])
 				for pointIndex, point in enumerate( points):
 					if pointsDistance( mouseCoord, point ) <= 5:
-						self._selectedPoint = pointIndex
-						self._selectedPoly = objIndex
+						self._selected_point = pointIndex
+						self._selected_poly = objIndex
 						return
-				self._selectedPoint = None
-				self._selectedPoly = None
+				self._selected_point = None
+				self._selected_poly = None
 			except: pass
 
 
@@ -200,10 +198,10 @@ class GeometryManualDesigner(BaseWidget):
 					next_point = points[ (pointIndex+1) % n_points ]
 					intersection = self.getIntersectionPoint(mouse, point, next_point )
 					if intersection != None:
-						self._selectedPoly = objIndex
+						self._selected_poly = objIndex
 						points.insert( pointIndex + 1, intersection )
-						self._polygons.setValue( 1, self._selectedPoly, points )
-						self._selectedPoint = pointIndex + 1
+						self._polygons.set_value( 1, self._selected_poly, points )
+						self._selected_point = pointIndex + 1
 						if not self._player.is_playing: self._player.refresh()
 						return
 			except: pass
@@ -211,38 +209,39 @@ class GeometryManualDesigner(BaseWidget):
 	
 	def on_player_click_in_video_window(self, event, x, y):
 		self.selectPoint( int(x), int(y) )
-		if not self._player.is_playing: self._player.refresh()
-
+		
 	def on_player_drag_in_video_window(self, startPoint, endPoint):
-		self._startPoint = ( int(startPoint[0]), int(startPoint[1]) )
-		self._endPoint = ( int(endPoint[0]), int(endPoint[1]) )
+		self._start_point = ( int(startPoint[0]), int(startPoint[1]) )
+		self._end_point = ( int(endPoint[0]), int(endPoint[1]) )
 
-		if self._selectedPoly!=None and self._selectedPoint!=None:
-			poly = self._polygons.getValue( 1, self._selectedPoly )
+		if self._selected_poly!=None and self._selected_point!=None:
+			poly = self._polygons.get_value( 1, self._selected_poly )
 			try:
 				points = eval(poly)
-				points[self._selectedPoint] = self._endPoint
-				self._polygons.setValue( 1, self._selectedPoly, points )
+				points[self._selected_point] = self._end_point
+				self._polygons.set_value( 1, self._selected_poly, points )
 			except: pass
 
 		if not self._player.is_playing: self._player.refresh() 
 			
 	def on_player_end_drag_in_video_window(self, startPoint, endPoint):
-		self._startPoint = int(startPoint[0]), int(startPoint[1])
-		self._endPoint 	 = int(endPoint[0]),   int(endPoint[1])
+		self._start_point = int(startPoint[0]), int(startPoint[1])
+		self._end_point   = int(endPoint[0]),   int(endPoint[1])
 
 		points = None
 		if self._square.checked:
-			points = createRectanglePoints(self._startPoint, self._endPoint)
-		elif self._circle.checked and self._endPoint[0]>self._startPoint[0] and self._endPoint[1]>self._startPoint[1]:
-			points = createEllipsePoints(self._startPoint, self._endPoint)
+			points = createRectanglePoints(self._start_point, self._end_point)
+		elif self._circle.checked and self._end_point[0]>self._start_point[0] and self._end_point[1]>self._start_point[1]:
+			points = createEllipsePoints(self._start_point, self._end_point)
 
 		if points: self._polygons += ["Poly_%d" % self._polygons.rows_count, points]
 
-		self._startPoint = None
-		self._endPoint = None
+		self._start_point 	 = None
+		self._end_point 	 = None
 		self._square.checked = False
 		self._circle.checked = False
+
+		if not self._player.is_playing: self._player.refresh() 
 
 
 	def __add_contours_from_threshold_win(self, contours):
@@ -254,12 +253,10 @@ class GeometryManualDesigner(BaseWidget):
 	def videoSelected(self): self._player.value = self._video.value
 		
 	def square_toggle(self, checked):
-		if checked:
-			self._circle.checked = False
+		if checked: self._circle.checked = False
 
 	def circle_toggle(self, checked):
-		if checked:
-			self._square.checked = False
+		if checked: self._square.checked = False
 
 	def threshold_btn_click(self):
 		if self._threshold_win is None:
@@ -275,6 +272,14 @@ class GeometryManualDesigner(BaseWidget):
 	def remove_clicked(self):
 		self._polygons -= -1 #Remove the selected row
 
+	@property
+	def geometries(self):
+		polys = []
+		rows = self._polygons.value
+		for objIndex, obj in enumerate(rows):		
+			points = eval(obj[1])
+			polys.append( [obj[0], np.array(points,np.int32)] )
+		return polys
 
 	@property
 	def polygons(self):
@@ -283,12 +288,13 @@ class GeometryManualDesigner(BaseWidget):
 		for objIndex, obj in enumerate(rows):		
 			points = eval(obj[1])
 			polys.append( np.array(points,np.int32) )
-		return np.array(polys)	
+		return np.array(polys)
+	
 
 	@property
-	def apply_evt(self): return self._apply.value
-	@apply_evt.setter
-	def apply_evt(self, value): 
+	def apply_event(self): return self._apply.value
+	@apply_event.setter
+	def apply_event(self, value): 
 		self._apply.value = value
 		self._show_apply = value is not None
 		
@@ -296,3 +302,26 @@ class GeometryManualDesigner(BaseWidget):
 	def show(self):
 		super(GeometryManualDesigner, self).show()
 		if hasattr(self,'_show_apply') and self._show_apply: self._apply.show()
+
+	@property
+	def video_filename(self): return None
+	@video_filename.setter
+	def video_filename(self, value): 
+		self._video.hide()
+		self._player.value = value
+
+	@property
+	def video_capture(self): return self.video_capture.value
+	@video_capture.setter
+	def video_capture(self, value): 
+		self._video.hide()
+		self._player.value = value
+
+	@property
+	def total_n_frames(self): 
+		if self._player._value is not None and self._player.value!='':
+			return self._player.max
+		else:
+			return 0
+
+	
