@@ -70,6 +70,7 @@ class GeometryManualDesigner(BaseWidget):
 		self._import 	= ControlButton("Import")
 		self._polygons 	= ControlList('Polygons')
 
+
 		self._apply 	= ControlButton('Apply')
 
 		self._formset 	= [ '_video',"_player", ("_square", "_circle", "_threshold", " ","_remove"," ", "_export", "_import"), "=", "_polygons",'_apply' ]
@@ -125,7 +126,7 @@ class GeometryManualDesigner(BaseWidget):
 		rows = self._polygons.value
 		for objIndex, obj in enumerate(rows):		
 			points = eval(obj[1])
-			cv2.polylines(frame, [np.array(points,np.int32)], True, (0,255,0), 1, lineType=cv2.LINE_AA)			
+			cv2.polylines(frame, [np.array(points,np.int32)], True, (0,255,0), 2, lineType=cv2.LINE_AA)			
 			for pointIndex, point in enumerate( points ):
 				if self._selected_point == pointIndex and objIndex==self._selected_poly:
 					cv2.circle(frame, point, 4, (0,0,255), 2)
@@ -278,8 +279,25 @@ class GeometryManualDesigner(BaseWidget):
 		rows = self._polygons.value
 		for objIndex, obj in enumerate(rows):		
 			points = eval(obj[1])
-			polys.append( [obj[0], np.array(points,np.int32)] )
+			polys.append( [obj[0], points] )
 		return polys
+
+	@geometries.setter
+	def geometries(self, value):
+		self._polygons.value = []
+
+		for name, poly in value:		
+			points = [tuple(p) for p in poly]
+			self._polygons += [name, points]
+
+
+		
+
+
+
+
+
+
 
 	@property
 	def polygons(self):
