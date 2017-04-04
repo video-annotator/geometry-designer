@@ -8,9 +8,14 @@ from pyforms.Controls 	import ControlList
 from pyforms.Controls 	import ControlFile
 from pyforms 			import BaseWidget
 import cv2, numpy as np, pickle, math
-from PyQt4 import QtGui, QtCore
 
 from geometry_designer.modules.geometry_from_threshold.GeometryFromThreshold import GeometryFromThreshold
+
+from pysettings import conf
+if conf.PYFORMS_USE_QT5:
+	from PyQt5 import QtCore, QtGui
+else:
+	from PyQt4 import QtCore, QtGui
 
 
 def pointsDistance(p1, p2): 			return  math.hypot(p2[0]-p1[0], p2[1]-p1[1])
