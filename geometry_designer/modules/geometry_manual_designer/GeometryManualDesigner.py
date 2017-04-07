@@ -9,7 +9,6 @@ from pyforms.Controls 	import ControlFile
 from pyforms 			import BaseWidget
 import cv2, numpy as np, pickle, math
 
-
 from pysettings import conf
 if conf.PYFORMS_USE_QT5:
 	from PyQt5.QtWidgets import QFileDialog
@@ -112,14 +111,14 @@ class GeometryManualDesigner(BaseWidget):
 				if not self._player.is_playing: self._player.refresh()
 
 	def export_clicked(self):
-		filename = str(QtGui.QFileDialog.getSaveFileName(self, 'Choose a file', '') )
+		filename = str(QFileDialog.getSaveFileName(self, 'Choose a file', '') )
 		if filename!="":
 			output = open( filename, 'w')
 			for values in self._polygons.value: output.write((';'.join(values)+'\n'))
 			output.close()
 
 	def import_clicked(self):
-		filename = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose a file', '') )
+		filename = str(QFileDialog.getOpenFileName(self, 'Choose a file', '') )
 		if filename!="":
 			infile 	 = open( filename, 'r');
 			polygons = []
