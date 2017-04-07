@@ -8,7 +8,15 @@ from pyforms.Controls 	import ControlList
 from pyforms.Controls 	import ControlFile
 from pyforms 			import BaseWidget
 import cv2, numpy as np, pickle, math
-from PyQt4 import QtGui, QtCore
+
+
+from pysettings import conf
+if conf.PYFORMS_USE_QT5:
+	from PyQt5.QtWidgets import QFileDialog
+	from PyQt5 import QtCore
+else:
+	from PyQt4 import QtCore
+	from PyQt4.QtGui import QFileDialog
 
 from geometry_designer.modules.geometry_from_threshold.GeometryFromThreshold import GeometryFromThreshold
 
@@ -107,7 +115,7 @@ class GeometryManualDesigner(BaseWidget):
 		filename = str(QtGui.QFileDialog.getSaveFileName(self, 'Choose a file', '') )
 		if filename!="":
 			output = open( filename, 'w')
-			for values in self._polygons.value: output.write(';'.join(values)+'\n')
+			for values in self._polygons.value: output.write((';'.join(values)+'\n'))
 			output.close()
 
 	def import_clicked(self):
