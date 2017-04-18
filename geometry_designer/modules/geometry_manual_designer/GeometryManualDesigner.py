@@ -148,8 +148,8 @@ class GeometryManualDesigner(BaseWidget):
 				height = self._end_point[1]-self._start_point[1]
 				center = ( self._start_point[0] + width/2, self._start_point[1] + height/2 )
 				
-				cv2.ellipse( frame, center, (width/2,height/2), 0, 0, 360, (233,44,44), 1 )
-				
+				cv2.ellipse( frame, (center, (width,height), 0), (233,44,44), 1 )
+	
 		return frame
 
 	def selectPoint(self,x, y):
