@@ -131,7 +131,7 @@ class GeometryManualDesigner(BaseWidget):
 
 	def process_frame(self, frame):
 		rows = self._polygons.value
-		for objIndex, obj in enumerate(rows):		
+		for objIndex, obj in enumerate(rows):
 			points = eval(obj[1])
 			cv2.polylines(frame, [np.array(points,np.int32)], True, (0,255,0), 2, lineType=cv2.LINE_AA)			
 			for pointIndex, point in enumerate( points ):
@@ -242,7 +242,7 @@ class GeometryManualDesigner(BaseWidget):
 		elif self._circle.checked and self._end_point[0]>self._start_point[0] and self._end_point[1]>self._start_point[1]:
 			points = createEllipsePoints(self._start_point, self._end_point)
 
-		if points: self._polygons += ["Poly_%d" % self._polygons.rows_count, points]
+		if points: self._polygons += ["Poly_%d" % self._polygons.rows_count, str(points)[1:-1]]
 
 		self._start_point 	 = None
 		self._end_point 	 = None
@@ -293,9 +293,9 @@ class GeometryManualDesigner(BaseWidget):
 	def geometries(self, value):
 		self._polygons.value = []
 
-		for name, poly in value:		
+		for name, poly in value:	
 			points = [tuple(p) for p in poly]
-			self._polygons += [name, points]
+			self._polygons += [name, str(points)[1:-1]]
 
 
 		
