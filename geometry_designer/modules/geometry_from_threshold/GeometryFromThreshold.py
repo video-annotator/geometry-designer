@@ -47,7 +47,7 @@ class GeometryFromThreshold(BaseWidget):
 			'_player']
 
 		self._filename.changed_event 	= self.__filename_changed
-		self._player.processFrame 		= self.__processFrame
+		self._player.process_frame_event 		= self.__processFrame
 		self._threshold.changed_event 	= self._player.refresh
 		self._epsilon.changed_event 	= self._player.refresh
 		self._add_contour.value			= self.__add_contours

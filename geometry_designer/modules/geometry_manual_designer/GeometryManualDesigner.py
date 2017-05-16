@@ -106,7 +106,7 @@ class GeometryManualDesigner(BaseWidget):
 				try:
 					points = eval(poly)
 					p = points.pop(self._selected_point)
-					self._polygons.set_value( 1, self._selected_poly, points )
+					self._polygons.set_value( 1, self._selected_poly, str(points)[1:-1] )
 				except: pass
 				if not self._player.is_playing: self._player.refresh()
 
@@ -208,7 +208,7 @@ class GeometryManualDesigner(BaseWidget):
 					if intersection != None:
 						self._selected_poly = objIndex
 						points.insert( pointIndex + 1, intersection )
-						self._polygons.set_value( 1, self._selected_poly, points )
+						self._polygons.set_value( 1, self._selected_poly, str(points)[1:-1])
 						self._selected_point = pointIndex + 1
 						if not self._player.is_playing: self._player.refresh()
 						return
@@ -220,15 +220,16 @@ class GeometryManualDesigner(BaseWidget):
 		
 	def on_player_drag_in_video_window(self, startPoint, endPoint):
 		self._start_point = ( int(startPoint[0]), int(startPoint[1]) )
-		self._end_point = ( int(endPoint[0]), int(endPoint[1]) )
+		self._end_point   = ( int(endPoint[0]), int(endPoint[1]) )
 
 		if self._selected_poly!=None and self._selected_point!=None:
 			poly = self._polygons.get_value( 1, self._selected_poly )
 			try:
-				points = eval(poly)
+				points = list(eval(poly))
 				points[self._selected_point] = self._end_point
-				self._polygons.set_value( 1, self._selected_poly, points )
-			except: pass
+				self._polygons.set_value( 1, self._selected_poly, str(points)[1:-1])
+			except Exception as e:
+				print(e)
 
 		if not self._player.is_playing: self._player.refresh() 
 			
@@ -256,7 +257,7 @@ class GeometryManualDesigner(BaseWidget):
 		for contour in contours:
 			if contour.any(): 
 				points = [tuple(p[0]) for p in contour.tolist()]
-				self._polygons += ["Poly_%d" % self._polygons.rows_count, points]
+				self._polygons += ["Poly_%d" % self._polygons.rows_count, str(points)[1:-1]]
 
 	def videoSelected(self): self._player.value = self._video.value
 		
