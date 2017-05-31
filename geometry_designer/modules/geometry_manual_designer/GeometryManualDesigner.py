@@ -196,11 +196,13 @@ class GeometryManualDesigner(BaseWidget):
 		else: return None
 
 	def on_player_double_click_in_video_window(self, event, x, y):
+
 		mouse = ( int(x), int(y) )
-		rows = self._polygons.value
+		rows  = self._polygons.value
+
 		for objIndex, obj in enumerate(rows):
 			try:
-				points = eval(obj[1])
+				points = list(eval(obj[1]))
 				n_points = len(points)
 				for pointIndex, point in enumerate( points ):
 					next_point = points[ (pointIndex+1) % n_points ]
@@ -209,10 +211,12 @@ class GeometryManualDesigner(BaseWidget):
 						self._selected_poly = objIndex
 						points.insert( pointIndex + 1, intersection )
 						self._polygons.set_value( 1, self._selected_poly, str(points)[1:-1])
+
 						self._selected_point = pointIndex + 1
 						if not self._player.is_playing: self._player.refresh()
 						return
-			except: pass
+			except:
+				pass
 
 	
 	def on_player_click_in_video_window(self, event, x, y):
