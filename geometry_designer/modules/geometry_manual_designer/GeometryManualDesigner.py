@@ -104,11 +104,12 @@ class GeometryManualDesigner(BaseWidget):
 			if self._selected_poly!=None and self._selected_point!=None:
 				poly = self._polygons.get_value( 1, self._selected_poly )
 				try:
-					points = eval(poly)
+					points = list(eval(poly))
 					p = points.pop(self._selected_point)
 					self._polygons.set_value( 1, self._selected_poly, str(points)[1:-1] )
-				except: pass
-				if not self._player.is_playing: self._player.refresh()
+					if not self._player.is_playing: self._player.refresh()
+				except:
+					pass
 
 	def export_clicked(self):
 		filename = str(QFileDialog.getSaveFileName(self, 'Choose a file', '') )
@@ -168,64 +169,64 @@ class GeometryManualDesigner(BaseWidget):
 			except: pass
 
 
-	def getIntersectionPoint(self, testPoint, point1, point2, tolerance = 5):
-		vector = ( point2[0]-point1[0], point2[1]-point1[1] )
-		p0 = point1
-		if vector[0]!=0:
-			k = float(testPoint[0] - p0[0]) / float(vector[0])
-			y = float(p0[1]) + k * float(vector[1]) 
-			if point2[0]>point1[0]:
-				maxValue = point2[0]
-				minValue = point1[0]
-			else:
-				maxValue = point1[0]
-				minValue = point2[0]
-			if abs(y-testPoint[1])<=tolerance and testPoint[0]<=maxValue and testPoint[0]>=minValue: return testPoint
-			else: return None
-		elif vector[1]!=0:
-			k = float(testPoint[1] - p0[1]) / float(vector[1])
-			x = float(p0[0]) + k * float(vector[0])
-			if point2[1]>point1[1]: 
-				maxValue = point2[1]
-				minValue = point1[1]
-			else:
-				maxValue = point1[1]
-				minValue = point2[1]
-			if abs(x-testPoint[0])<=tolerance and testPoint[1]<=maxValue and testPoint[1]>=minValue: return testPoint
-			else: return None
-		else: return None
+	def get_intersection_point_distance(self, test_point, point1, point2):
+		p1 = np.float32(point1)
+		p2 = np.float32(point2)
+		p3 = np.float32(test_point)
+		dist = np.linalg.norm(np.cross(p2-p1, p1-p3))/np.linalg.norm(p2-p1)
+		return dist
+
 
 	def on_player_double_click_in_video_window(self, event, x, y):
-
 		mouse = ( int(x), int(y) )
 		rows  = self._polygons.value
 
-		for objIndex, obj in enumerate(rows):
+		distances = []
+		for obj_index, obj in enumerate(rows):
 			try:
 				points = list(eval(obj[1]))
 				n_points = len(points)
-				for pointIndex, point in enumerate( points ):
-					next_point = points[ (pointIndex+1) % n_points ]
-					intersection = self.getIntersectionPoint(mouse, point, next_point )
-					if intersection != None:
-						self._selected_poly = objIndex
-						points.insert( pointIndex + 1, intersection )
-						self._polygons.set_value( 1, self._selected_poly, str(points)[1:-1])
+				for point_index, point in enumerate( points ):
+					next_point = points[ (point_index+1) % n_points ]
+					distance = self.get_intersection_point_distance(mouse, point, next_point )
+					if distance<=5: 
+						vector = next_point[0]-point[0], next_point[1]-point[1]
+						center = point[0]+vector[0]/2,point[1]+vector[1]/2
+						radius = pointsDistance(center, point)
 
-						self._selected_point = pointIndex + 1
-						if not self._player.is_playing: self._player.refresh()
-						return
+						mouse_distance = pointsDistance(center, mouse)
+						if mouse_distance<radius:
+							distances.append( (distance, obj_index, point_index) )
 			except:
 				pass
 
+		if len(distances)>0:
+			distances = sorted(distances, key=lambda x: x[0])
+			obj_index   = distances[0][1]
+			point_index = distances[0][2]
+			points = list(eval(rows[obj_index][1]))
+
+			points.insert( point_index + 1, mouse )
+			self._polygons.set_value( 1, obj_index, str(points)[1:-1])
+
+			self._selected_poly  = obj_index
+			self._selected_point = point_index + 1
+
+			if not self._player.is_playing: self._player.refresh()
+			
 	
 	def on_player_click_in_video_window(self, event, x, y):
-		self.selectPoint( int(x), int(y) )
+		self._selected_poly  = None
+		self._selected_point = None
+
+		if not self._square.checked and not self._circle.checked:
+			self.selectPoint( int(x), int(y) )
+		
 		
 	def on_player_drag_in_video_window(self, startPoint, endPoint):
 		self._start_point = ( int(startPoint[0]), int(startPoint[1]) )
 		self._end_point   = ( int(endPoint[0]), int(endPoint[1]) )
-
+		
 		if self._selected_poly!=None and self._selected_point!=None:
 			poly = self._polygons.get_value( 1, self._selected_poly )
 			try:
@@ -240,7 +241,8 @@ class GeometryManualDesigner(BaseWidget):
 	def on_player_end_drag_in_video_window(self, startPoint, endPoint):
 		self._start_point = int(startPoint[0]), int(startPoint[1])
 		self._end_point   = int(endPoint[0]),   int(endPoint[1])
-
+		
+		
 		points = None
 		if self._square.checked:
 			points = createRectanglePoints(self._start_point, self._end_point)
@@ -284,6 +286,7 @@ class GeometryManualDesigner(BaseWidget):
 
 	def remove_clicked(self):
 		self._polygons -= -1 #Remove the selected row
+		if not self._player.is_playing: self._player.refresh() 
 
 	@property
 	def geometries(self):
