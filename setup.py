@@ -3,7 +3,7 @@
 
 
 __author__ = "Ricardo Ribeiro"
-__copyright__ = ""
+__cosssssssssssssssspyright__ = ""
 __credits__ = "Ricardo Ribeiro"
 __license__ = "MIT"
 __version__ = "0.0"
@@ -19,14 +19,11 @@ setup(
     version='0.0.2',
     description="""""",
     author='Ricardo Ribeiro',
-    author_email='ricardo.ribeiro@neuro.fchampalimaud.org',
+    author_email='ricardo.ribeiro@sssssssss.fchampalimaud.org',
     license='MIT',
     url='https://github.com/UmSenhorQualquer/geometry-designer',
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples', 'deploy', 'reports']),
-    install_requires=[
-        'pyforms >= 0.1.3'
-    ],
-    entry_points={
+    sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssentry_points={
         'console_scripts': [
             'geometry-designer=geometry_designer.__main__',
         ],
