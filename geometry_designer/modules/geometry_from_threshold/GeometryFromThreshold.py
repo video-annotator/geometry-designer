@@ -37,8 +37,8 @@ class GeometryFromThreshold(BaseWidget):
 		
 		self._filename 		= ControlFile('Video file name')
 		self._player   		= ControlPlayer('Player')
-		self._threshold 	= ControlSlider('Movement threshold', 10, 0, 255)
-		self._epsilon 		= ControlSlider('Epsilon', 10, 1, 255)
+		self._threshold 	= ControlSlider('Movement threshold', default=10, minimum=0, maximum=255)
+		self._epsilon 		= ControlSlider('Epsilon', default=10, minimum=1, maximum=255)
 		self._add_contour   = ControlButton('add contour')
 
 
