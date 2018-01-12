@@ -1,3 +1,4 @@
+from pysettings import conf
 from pyforms.Controls 	import ControlText
 from pyforms.Controls 	import ControlProgress
 from pyforms.Controls 	import ControlSlider
@@ -7,18 +8,12 @@ from pyforms.Controls 	import ControlPlayer
 from pyforms.Controls 	import ControlList
 from pyforms.Controls 	import ControlFile
 from pyforms 			import BaseWidget
-import cv2, numpy as np, pickle, math
-
-from pysettings import conf
-if conf.PYFORMS_USE_QT5:
-	from PyQt5.QtWidgets import QFileDialog
-	from PyQt5 import QtCore
-else:
-	from PyQt4 import QtCore
-	from PyQt4.QtGui import QFileDialog
-
+import cv2, numpy as np, pickle, math, AnyQt
 from geometry_designer.modules.geometry_from_threshold.GeometryFromThreshold import GeometryFromThreshold
 
+if conf.PYFORMS_MODE=='GUI':
+	from AnyQt.QtWidgets import QFileDialog
+	from AnyQt import QtCore
 
 def pointsDistance(p1, p2): 			return  math.hypot(p2[0]-p1[0], p2[1]-p1[1])
 def createRectanglePoints(start, end): 	return [ start, (end[0],start[1]), end, (start[0],end[1]) ]
