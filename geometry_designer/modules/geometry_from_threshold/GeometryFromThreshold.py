@@ -1,11 +1,11 @@
-from pyforms.Controls import ControlText
-from pyforms.Controls import ControlProgress
-from pyforms.Controls import ControlSlider
-from pyforms.Controls import ControlCombo
-from pyforms.Controls import ControlButton
-from pyforms.Controls import ControlPlayer
-from pyforms.Controls import ControlList
-from pyforms.Controls import ControlFile
+from pyforms.controls import ControlText
+from pyforms.controls import ControlProgress
+from pyforms.controls import ControlSlider
+from pyforms.controls import ControlCombo
+from pyforms.controls import ControlButton
+from pyforms.controls import ControlPlayer
+from pyforms.controls import ControlList
+from pyforms.controls import ControlFile
 from pyforms 		  import BaseWidget
 import cv2, numpy as np, pyforms
 
