@@ -1,4 +1,4 @@
-from pysettings import conf
+from pyforms import conf
 from pyforms.controls 	import ControlText
 from pyforms.controls 	import ControlProgress
 from pyforms.controls 	import ControlSlider
