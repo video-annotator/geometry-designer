@@ -1,4 +1,4 @@
-from pyforms import conf
+from confapp import conf
 from pyforms.controls 	import ControlText
 from pyforms.controls 	import ControlProgress
 from pyforms.controls 	import ControlSlider
@@ -7,7 +7,7 @@ from pyforms.controls 	import ControlButton
 from pyforms.controls 	import ControlPlayer
 from pyforms.controls 	import ControlList
 from pyforms.controls 	import ControlFile
-from pyforms 			import BaseWidget
+from pyforms.basewidget import BaseWidget
 import cv2, numpy as np, pickle, math, AnyQt
 from geometry_designer.modules.geometry_from_threshold.GeometryFromThreshold import GeometryFromThreshold
 

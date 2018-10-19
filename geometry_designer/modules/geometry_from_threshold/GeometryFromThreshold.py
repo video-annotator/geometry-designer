@@ -6,7 +6,7 @@ from pyforms.controls import ControlButton
 from pyforms.controls import ControlPlayer
 from pyforms.controls import ControlList
 from pyforms.controls import ControlFile
-from pyforms 		  import BaseWidget
+from pyforms.basewidget import BaseWidget
 import cv2, numpy as np, pyforms
 
 
