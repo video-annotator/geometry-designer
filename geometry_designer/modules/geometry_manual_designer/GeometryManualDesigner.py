@@ -138,13 +138,13 @@ class GeometryManualDesigner(BaseWidget):
 			
 		if self._start_point and self._end_point:
 			if self._square.checked:
-				cv2.rectangle(frame, self._start_point, self._end_point, (233,44,44), 1 )
+				cv2.rectangle(frame, self._start_point, self._end_point, (233,44,44), 2 )
 			elif self._circle.checked and self._end_point[0]>self._start_point[0] and self._end_point[1]>self._start_point[1]:
 				width = self._end_point[0]-self._start_point[0]
 				height = self._end_point[1]-self._start_point[1]
 				center = ( self._start_point[0] + width/2, self._start_point[1] + height/2 )
 				
-				cv2.ellipse( frame, (center, (width,height), 0), (233,44,44), 1 )
+				cv2.ellipse( frame, (center, (width,height), 0), (233,44,44), 2 )
 	
 		return frame
 
