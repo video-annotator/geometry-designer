@@ -3,7 +3,7 @@
 
 
 __author__ = "Ricardo Ribeiro"
-__cosssssssssssssssspyright__ = ""
+__copyright__ = ""
 __credits__ = "Ricardo Ribeiro"
 __license__ = "MIT"
 __version__ = "0.1"
@@ -16,7 +16,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='geometry_designer',
-    version='0.0.2',
+    version=__version__,
     description="""""",
     author='Ricardo Ribeiro',
     author_email='ricardo.ribeiro@sssssssss.fchampalimaud.org',
