@@ -23,7 +23,7 @@ setup(
     license='MIT',
     url='https://github.com/UmSenhorQualquer/geometry-designer',
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples', 'deploy', 'reports']),
-    sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssentry_points={
+    entry_points={
         'console_scripts': [
             'geometry-designer=geometry_designer.__main__',
         ],
