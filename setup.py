@@ -6,7 +6,7 @@ __author__ = "Ricardo Ribeiro"
 __copyright__ = ""
 __credits__ = "Ricardo Ribeiro"
 __license__ = "MIT"
-__version__ = "0.2"
+__version__ = "0.3"
 __maintainer__ = ["Ricardo Ribeiro", "Carlos Mão de Ferro"]
 __email__ = ["ricardojvr at gmail.com", "cajomferro at gmail.com"]
 __status__ = "Development"
@@ -19,13 +19,8 @@ setup(
     version=__version__,
     description="""""",
     author='Ricardo Ribeiro',
-    author_email='ricardo.ribeiro@sssssssss.fchampalimaud.org',
+    author_email='ricardo.ribeiro@research.fchampalimaud.org',
     license='MIT',
     url='https://github.com/UmSenhorQualquer/geometry-designer',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples', 'deploy', 'reports']),
-    entry_points={
-        'console_scripts': [
-            'geometry-designer=geometry_designer.__main__',
-        ],
-    }
+    packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples', 'deploy', 'reports'])
 )
